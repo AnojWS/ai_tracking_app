@@ -1,0 +1,14 @@
+import 'package:ai_tracking_app/features/goals/presentation/screens/goal_list_screen.dart';
+import 'package:flutter/material.dart';
+
+class AiTrackingApp extends StatelessWidget {
+  const AiTrackingApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Goal Tracker',
+      home: GoalListScreen(), // You'll create this next
+    );
+  }
+}
