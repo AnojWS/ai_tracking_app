@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "734684488371",
+    "project_id": "ai-tracking-app",
+    "storage_bucket": "ai-tracking-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:734684488371:android:1b68625be8aee31a0446c6",
+        "android_client_info": {
+          "package_name": "com.example.ai_tracking_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCt82qoGD_G355QnsukHQ1bo_TPO4ASpZk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
