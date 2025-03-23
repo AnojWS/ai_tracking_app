@@ -40,14 +40,25 @@ class GoalListScreen extends StatelessWidget {
                             : TextDecoration.none,
                   ),
                 ),
-                trailing: Checkbox(
-                  value: goals[index].isDone,
-                  onChanged: (newValue) {
-                    FirebaseService.updateGoalStatus(
-                      goals[index].id,
-                      newValue!,
-                    );
-                  },
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Checkbox(
+                      value: goals[index].isDone,
+                      onChanged: (newValue) {
+                        FirebaseService.updateGoalStatus(
+                          goals[index].id,
+                          newValue!,
+                        );
+                      },
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.delete),
+                      onPressed: () {
+                        FirebaseService.deleteGoal(goals[index].id);
+                      },
+                    ),
+                  ],
                 ),
               );
             },
