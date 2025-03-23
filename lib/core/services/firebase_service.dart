@@ -27,4 +27,8 @@ class FirebaseService {
   static Future<void> updateGoalStatus(String goalId, bool isDone) async {
     await _firestore.collection('goals').doc(goalId).update({'isDone': isDone});
   }
+
+  static Future<void> deleteGoal(String goalId) async {
+    await _firestore.collection('goals').doc(goalId).delete();
+  }
 }
