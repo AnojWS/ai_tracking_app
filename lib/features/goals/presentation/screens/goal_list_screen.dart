@@ -8,6 +8,41 @@ import '../../data/models/goal_model.dart';
 class GoalListScreen extends StatelessWidget {
   const GoalListScreen({super.key});
 
+  void _showAddGoalDialog(BuildContext context) {
+    final TextEditingController controller = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Add a Goal'),
+          content: TextField(
+            controller: controller,
+            decoration: InputDecoration(hintText: 'Enter your goal'),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                if (controller.text.isNotEmpty) {
+                  final newGoal = GoalModel(
+                    id: DateTime.now().toString(),
+                    title: controller.text,
+                  );
+                  FirebaseService.saveGoal(newGoal);
+                  Navigator.pop(context);
+                }
+              },
+              child: Text('Add'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,13 +101,7 @@ class GoalListScreen extends StatelessWidget {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          final newGoal = GoalModel(
-            id: DateTime.now().toString(), // Simple unique ID
-            title: 'Test Goal ${DateTime.now().second}',
-          );
-          FirebaseService.saveGoal(newGoal);
-        },
+        onPressed: () => _showAddGoalDialog(context),
         child: Icon(Icons.add),
       ),
     );
