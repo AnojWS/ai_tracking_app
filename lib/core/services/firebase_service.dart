@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import '../../features/goals/data/models/goal_model.dart';
-import '../../firebase_options.dart';
 
 class FirebaseService {
   static Future<void> init() async {
@@ -23,5 +22,9 @@ class FirebaseService {
       'title': goal.title,
       'isDone': goal.isDone,
     });
+  }
+
+  static Future<void> updateGoalStatus(String goalId, bool isDone) async {
+    await _firestore.collection('goals').doc(goalId).update({'isDone': isDone});
   }
 }
