@@ -31,7 +31,15 @@ class GoalListScreen extends StatelessWidget {
             itemCount: goals.length,
             itemBuilder: (context, index) {
               return ListTile(
-                title: Text(goals[index].title),
+                title: Text(
+                  goals[index].title,
+                  style: TextStyle(
+                    decoration:
+                        goals[index].isDone
+                            ? TextDecoration.lineThrough
+                            : TextDecoration.none,
+                  ),
+                ),
                 trailing: Checkbox(
                   value: goals[index].isDone,
                   onChanged: (newValue) {
