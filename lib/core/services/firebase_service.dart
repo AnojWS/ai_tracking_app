@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '../../features/goals/data/models/goal_model.dart';
 
@@ -7,10 +8,10 @@ class FirebaseService {
   static Future<void> init() async {
     await Firebase.initializeApp(
       options: FirebaseOptions(
-        apiKey: "AIzaSyCt82qoGD_G355QnsukHQ1bo_TPO4ASpZk",
-        appId: "1:734684488371:android:1b68625be8aee31a0446c6",
-        messagingSenderId: "734684488371",
-        projectId: "ai-tracking-app",
+        apiKey: dotenv.env['FIREBASE_API_KEY'] ?? '',
+        appId: dotenv.env['FIREBASE_APP_ID'] ?? '',
+        messagingSenderId: dotenv.env['FIREBASE_MESSAGING_SENDER_ID'] ?? '',
+        projectId: dotenv.env['FIREBASE_PROJECT_ID'] ?? '',
       ),
     );
   }
