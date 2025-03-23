@@ -8,7 +8,6 @@ import '../../data/models/goal_model.dart';
 class GoalListScreen extends StatelessWidget {
   const GoalListScreen({super.key});
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,22 +18,36 @@ class GoalListScreen extends StatelessWidget {
           if (!snapshot.hasData) {
             return Center(child: CircularProgressIndicator());
           }
-          final goals = snapshot.data!.docs.map((doc) {
-            final data = doc.data() as Map<String, dynamic>;
-            return GoalModel(
-              id: doc.id,
-              title: data['title'],
-              isDone: data['isDone'],
-            );
-          }).toList();
+          final goals =
+              snapshot.data!.docs.map((doc) {
+                final data = doc.data() as Map<String, dynamic>;
+                return GoalModel(
+                  id: doc.id,
+                  title: data['title'],
+                  isDone: data['isDone'],
+                );
+              }).toList();
           return ListView.builder(
             itemCount: goals.length,
             itemBuilder: (context, index) {
               return ListTile(
-                title: Text(goals[index].title),
+                title: Text(
+                  goals[index].title,
+                  style: TextStyle(
+                    decoration:
+                        goals[index].isDone
+                            ? TextDecoration.lineThrough
+                            : TextDecoration.none,
+                  ),
+                ),
                 trailing: Checkbox(
                   value: goals[index].isDone,
-                  onChanged: null, // Static for now
+                  onChanged: (newValue) {
+                    FirebaseService.updateGoalStatus(
+                      goals[index].id,
+                      newValue!,
+                    );
+                  },
                 ),
               );
             },
