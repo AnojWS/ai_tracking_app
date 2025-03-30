@@ -43,10 +43,43 @@ class GoalListScreen extends StatelessWidget {
     );
   }
 
+  void _showDeleteConfirmationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Delete All Goals'),
+          content: Text('Are you sure you want to delete all goals?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                FirebaseService.clearAllGoals();
+                Navigator.pop(context);
+              },
+              child: Text('Delete'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('My Goals')),
+      appBar: AppBar(
+        title: Text('My Goals'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.delete),
+            onPressed: () => _showDeleteConfirmationDialog(context),
+          ),
+        ],
+      ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection('goals').snapshots(),
         builder: (context, snapshot) {

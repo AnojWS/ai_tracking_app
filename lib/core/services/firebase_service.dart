@@ -32,4 +32,11 @@ class FirebaseService {
   static Future<void> deleteGoal(String goalId) async {
     await _firestore.collection('goals').doc(goalId).delete();
   }
+
+  static Future<void> clearAllGoals() async {
+    final goals = await _firestore.collection('goals').get();
+    for (var doc in goals.docs) {
+      await doc.reference.delete();
+    }
+  }
 }
