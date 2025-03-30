@@ -13,7 +13,7 @@ class AiTrackingApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: GoalListScreen(), // You'll create this next
+      home: GoalListScreen(),
     );
   }
 }
