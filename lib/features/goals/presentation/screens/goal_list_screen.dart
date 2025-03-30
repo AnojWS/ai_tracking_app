@@ -1,4 +1,3 @@
-// lib/features/goals/presentation/screens/goal_list_screen.dart
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -36,6 +35,39 @@ class GoalListScreen extends StatelessWidget {
                 }
               },
               child: Text('Add'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showEditGoalDialog(BuildContext context, GoalModel goal) {
+    final TextEditingController controller = TextEditingController(
+      text: goal.title,
+    );
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Edit Goal'),
+          content: TextField(
+            controller: controller,
+            decoration: InputDecoration(hintText: 'Update your goal'),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                if (controller.text.isNotEmpty) {
+                  FirebaseService.updateGoalTitle(goal.id, controller.text);
+                  Navigator.pop(context);
+                }
+              },
+              child: Text('Save'),
             ),
           ],
         );
@@ -108,6 +140,7 @@ class GoalListScreen extends StatelessWidget {
                             : TextDecoration.none,
                   ),
                 ),
+                onTap: () => _showEditGoalDialog(context, goals[index]),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
