@@ -1,105 +1,18 @@
+import 'package:ai_tracking_app/core/utils/dialog_manager.dart';
+import 'package:ai_tracking_app/features/goals/bloc/goal_bloc.dart';
+import 'package:ai_tracking_app/features/goals/data/models/goal_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/services/firebase_service.dart';
-import '../../data/models/goal_model.dart';
-
-class GoalListScreen extends StatelessWidget {
+class GoalListScreen extends StatefulWidget {
   const GoalListScreen({super.key});
 
-  void _showAddGoalDialog(BuildContext context) {
-    final TextEditingController controller = TextEditingController();
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text('Add a Goal'),
-          content: TextField(
-            controller: controller,
-            decoration: InputDecoration(hintText: 'Enter your goal'),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                if (controller.text.isNotEmpty) {
-                  final newGoal = GoalModel(
-                    id: DateTime.now().toString(),
-                    title: controller.text,
-                  );
-                  FirebaseService.saveGoal(newGoal);
-                  Navigator.pop(context);
-                }
-              },
-              child: Text('Add'),
-            ),
-          ],
-        );
-      },
-    );
-  }
+  @override
+  State<GoalListScreen> createState() => _GoalListScreenState();
+}
 
-  void _showEditGoalDialog(BuildContext context, GoalModel goal) {
-    final TextEditingController controller = TextEditingController(
-      text: goal.title,
-    );
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text('Edit Goal'),
-          content: TextField(
-            controller: controller,
-            decoration: InputDecoration(hintText: 'Update your goal'),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                if (controller.text.isNotEmpty) {
-                  FirebaseService.updateGoalTitle(goal.id, controller.text);
-                  Navigator.pop(context);
-                }
-              },
-              child: Text('Save'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _showDeleteConfirmationDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text('Delete All Goals'),
-          content: Text('Are you sure you want to delete all goals?'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                FirebaseService.clearAllGoals();
-                Navigator.pop(context);
-              },
-              child: Text('Delete'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
+class _GoalListScreenState extends State<GoalListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -108,7 +21,7 @@ class GoalListScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: Icon(Icons.delete),
-            onPressed: () => _showDeleteConfirmationDialog(context),
+            onPressed: () => DialogManager.showDeleteAllDialog(context),
           ),
         ],
       ),
@@ -125,6 +38,10 @@ class GoalListScreen extends StatelessWidget {
                   id: doc.id,
                   title: data['title'],
                   isDone: data['isDone'],
+                  deadline:
+                      data['deadline'] != null
+                          ? DateTime.parse(data['deadline'])
+                          : null,
                 );
               }).toList();
           return ListView.builder(
@@ -140,23 +57,29 @@ class GoalListScreen extends StatelessWidget {
                             : TextDecoration.none,
                   ),
                 ),
-                onTap: () => _showEditGoalDialog(context, goals[index]),
+                onTap:
+                    () =>
+                        DialogManager.showEditGoalDialog(context, goals[index]),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Checkbox(
                       value: goals[index].isDone,
                       onChanged: (newValue) {
-                        FirebaseService.updateGoalStatus(
-                          goals[index].id,
-                          newValue!,
+                        context.read<GoalBloc>().add(
+                          UpdateGoalStatus(
+                            goalId: goals[index].id,
+                            isDone: newValue!,
+                          ),
                         );
                       },
                     ),
                     IconButton(
                       icon: Icon(Icons.delete),
                       onPressed: () {
-                        FirebaseService.deleteGoal(goals[index].id);
+                        context.read<GoalBloc>().add(
+                          DeleteGoal(goalId: goals[index].id),
+                        );
                       },
                     ),
                   ],
@@ -167,7 +90,7 @@ class GoalListScreen extends StatelessWidget {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => _showAddGoalDialog(context),
+        onPressed: () => DialogManager.showAddGoalDialog(context),
         child: Icon(Icons.add),
       ),
     );

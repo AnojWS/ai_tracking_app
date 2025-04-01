@@ -22,6 +22,7 @@ class FirebaseService {
     await _firestore.collection('goals').doc(goal.id).set({
       'title': goal.title,
       'isDone': goal.isDone,
+      'deadline': goal.deadline?.toIso8601String(),
     });
   }
 
@@ -29,8 +30,15 @@ class FirebaseService {
     await _firestore.collection('goals').doc(goalId).update({'isDone': isDone});
   }
 
-  static Future<void> updateGoalTitle(String goalId, String title) async {
-    await _firestore.collection('goals').doc(goalId).update({'title': title});
+  static Future<void> updateGoal(
+    String goalId,
+    String title,
+    DateTime? newDeadline,
+  ) async {
+    await _firestore.collection('goals').doc(goalId).update({
+      'title': title,
+      'deadline': newDeadline,
+    });
   }
 
   static Future<void> deleteGoal(String goalId) async {
