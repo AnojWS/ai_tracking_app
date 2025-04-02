@@ -59,7 +59,17 @@ class _EditGoalDialogState extends State<EditGoalDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<GoalBloc, GoalState>(
+    return BlocConsumer<GoalBloc, GoalState>(
+      listenWhen:
+          (previous, current) => previous.editDeadline != current.editDeadline,
+      listener: (context, state) {
+        if (state.editDeadline != null) {
+          _deadlineController.text = state.editDeadline!.toString().substring(
+            0,
+            16,
+          );
+        }
+      },
       buildWhen:
           (previous, current) => previous.editDeadline != current.editDeadline,
       builder: (context, state) {
@@ -76,11 +86,6 @@ class _EditGoalDialogState extends State<EditGoalDialog> {
               GestureDetector(
                 onTap: () async {
                   final deadline = await _pickDeadline(context);
-                  if (deadline != null) {
-                    _deadlineController.text = state.addDeadline!
-                        .toString()
-                        .substring(0, 16);
-                  }
                   if (context.mounted) {
                     context.read<GoalBloc>().add(
                       SetEditDedLine(deadline: deadline),

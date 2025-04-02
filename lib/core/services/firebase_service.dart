@@ -15,40 +15,4 @@ class FirebaseService {
       ),
     );
   }
-
-  static final _firestore = FirebaseFirestore.instance;
-
-  static Future<void> saveGoal(GoalModel goal) async {
-    await _firestore.collection('goals').doc(goal.id).set({
-      'title': goal.title,
-      'isDone': goal.isDone,
-      'deadline': goal.deadline?.toIso8601String(),
-    });
-  }
-
-  static Future<void> updateGoalStatus(String goalId, bool isDone) async {
-    await _firestore.collection('goals').doc(goalId).update({'isDone': isDone});
-  }
-
-  static Future<void> updateGoal(
-    String goalId,
-    String title,
-    DateTime? newDeadline,
-  ) async {
-    await _firestore.collection('goals').doc(goalId).update({
-      'title': title,
-      'deadline': newDeadline,
-    });
-  }
-
-  static Future<void> deleteGoal(String goalId) async {
-    await _firestore.collection('goals').doc(goalId).delete();
-  }
-
-  static Future<void> clearAllGoals() async {
-    final goals = await _firestore.collection('goals').get();
-    for (var doc in goals.docs) {
-      await doc.reference.delete();
-    }
-  }
 }

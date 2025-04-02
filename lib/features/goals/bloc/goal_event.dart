@@ -3,6 +3,13 @@ part of 'goal_bloc.dart';
 @immutable
 sealed class GoalEvent {}
 
+class SubscribeGoals extends GoalEvent {}
+
+class GoalsUpdated extends GoalEvent {
+  final List<GoalModel> goals;
+  GoalsUpdated(this.goals);
+}
+
 class SetAddDedLine extends GoalEvent {
   final DateTime? deadline;
 

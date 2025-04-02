@@ -46,68 +46,75 @@ class _AddGoalDialogState extends State<AddGoalDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<GoalBloc, GoalState>(
-      buildWhen:
+    return BlocListener<GoalBloc, GoalState>(
+      listenWhen:
           (previous, current) => previous.addDeadline != current.addDeadline,
-      builder: (context, state) {
-        return AlertDialog(
-          title: Text('Add a Goal'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: _tittleController,
-                decoration: InputDecoration(hintText: 'Enter your goal'),
-              ),
-              SizedBox(height: 16.h),
-              GestureDetector(
-                onTap: () async {
-                  final deadline = await _pickDeadline(context);
-                  if (deadline != null) {
-                    _deadlineController.text = state.addDeadline!
-                        .toString()
-                        .substring(0, 16);
-                  }
-                  if (context.mounted) {
-                    context.read<GoalBloc>().add(
-                      SetAddDedLine(deadline: deadline),
-                    );
-                  }
-                },
-                child: AbsorbPointer(
-                  child: CommonTextFormFiled(
-                    controller: _deadlineController,
-                    label: 'Deadline',
-                    hintText: 'Select deadline',
-                    suffixIcon: const Icon(Icons.calendar_today),
-                    textAlign: TextAlign.center,
+      listener: (context, state) {
+        if (state.addDeadline != null) {
+          _deadlineController.text = state.addDeadline!.toString().substring(
+            0,
+            16,
+          );
+        }
+      },
+      child: BlocBuilder<GoalBloc, GoalState>(
+        buildWhen:
+            (previous, current) => previous.addDeadline != current.addDeadline,
+        builder: (context, state) {
+          return AlertDialog(
+            title: Text('Add a Goal'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: _tittleController,
+                  decoration: InputDecoration(hintText: 'Enter your goal'),
+                ),
+                SizedBox(height: 16.h),
+                GestureDetector(
+                  onTap: () async {
+                    final deadline = await _pickDeadline(context);
+                    if (context.mounted) {
+                      context.read<GoalBloc>().add(
+                        SetAddDedLine(deadline: deadline),
+                      );
+                    }
+                  },
+                  child: AbsorbPointer(
+                    child: CommonTextFormFiled(
+                      controller: _deadlineController,
+                      label: 'Deadline',
+                      hintText: 'Select deadline',
+                      suffixIcon: const Icon(Icons.calendar_today),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () {
+                  if (_tittleController.text.isNotEmpty) {
+                    final newGoal = GoalModel(
+                      id: DateTime.now().toString(),
+                      title: _tittleController.text,
+                      deadline: state.addDeadline,
+                    );
+                    context.read<GoalBloc>().add(AddGoal(newGoal));
+                    Navigator.pop(context);
+                  }
+                },
+                child: Text('Add'),
               ),
             ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                if (_tittleController.text.isNotEmpty) {
-                  final newGoal = GoalModel(
-                    id: DateTime.now().toString(),
-                    title: _tittleController.text,
-                    deadline: state.addDeadline,
-                  );
-                  context.read<GoalBloc>().add(AddGoal(newGoal));
-                  Navigator.pop(context);
-                }
-              },
-              child: Text('Add'),
-            ),
-          ],
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

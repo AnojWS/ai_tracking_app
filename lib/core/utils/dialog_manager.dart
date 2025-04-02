@@ -10,22 +10,14 @@ class DialogManager {
   static Future<void> showAddGoalDialog(BuildContext context) {
     return showDialog(
       context: context,
-      builder:
-          (dialogContext) => BlocProvider.value(
-            value: BlocProvider.of<GoalBloc>(context),
-            child: AddGoalDialog(),
-          ),
+      builder: (dialogContext) => AddGoalDialog(),
     );
   }
 
   static Future<void> showEditGoalDialog(BuildContext context, GoalModel goal) {
     return showDialog(
       context: context,
-      builder:
-          (dialogContext) => BlocProvider.value(
-            value: BlocProvider.of<GoalBloc>(context),
-            child: EditGoalDialog(goal: goal),
-          ),
+      builder: (dialogContext) => EditGoalDialog(goal: goal),
     );
   }
 
