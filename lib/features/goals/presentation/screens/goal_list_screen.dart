@@ -1,162 +1,61 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ai_tracking_app/core/utils/dialog_manager.dart';
+import 'package:ai_tracking_app/features/goals/bloc/goal_bloc.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../core/services/firebase_service.dart';
-import '../../data/models/goal_model.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class GoalListScreen extends StatelessWidget {
   const GoalListScreen({super.key});
-
-  void _showAddGoalDialog(BuildContext context) {
-    final TextEditingController controller = TextEditingController();
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text('Add a Goal'),
-          content: TextField(
-            controller: controller,
-            decoration: InputDecoration(hintText: 'Enter your goal'),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                if (controller.text.isNotEmpty) {
-                  final newGoal = GoalModel(
-                    id: DateTime.now().toString(),
-                    title: controller.text,
-                  );
-                  FirebaseService.saveGoal(newGoal);
-                  Navigator.pop(context);
-                }
-              },
-              child: Text('Add'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _showEditGoalDialog(BuildContext context, GoalModel goal) {
-    final TextEditingController controller = TextEditingController(
-      text: goal.title,
-    );
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text('Edit Goal'),
-          content: TextField(
-            controller: controller,
-            decoration: InputDecoration(hintText: 'Update your goal'),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                if (controller.text.isNotEmpty) {
-                  FirebaseService.updateGoalTitle(goal.id, controller.text);
-                  Navigator.pop(context);
-                }
-              },
-              child: Text('Save'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _showDeleteConfirmationDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text('Delete All Goals'),
-          content: Text('Are you sure you want to delete all goals?'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                FirebaseService.clearAllGoals();
-                Navigator.pop(context);
-              },
-              child: Text('Delete'),
-            ),
-          ],
-        );
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('My Goals'),
+        title: const Text('My Goals'),
         actions: [
           IconButton(
-            icon: Icon(Icons.delete),
-            onPressed: () => _showDeleteConfirmationDialog(context),
+            icon: const Icon(Icons.delete),
+            onPressed: () => DialogManager.showDeleteAllDialog(context),
           ),
         ],
       ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('goals').snapshots(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return Center(child: CircularProgressIndicator());
+      body: BlocBuilder<GoalBloc, GoalState>(
+        buildWhen: (previous, current) => previous.goals != current.goals,
+        builder: (context, state) {
+          if (state.goals.isEmpty) {
+            return const Center(child: Text('No Goals Added.'));
           }
-          final goals =
-              snapshot.data!.docs.map((doc) {
-                final data = doc.data() as Map<String, dynamic>;
-                return GoalModel(
-                  id: doc.id,
-                  title: data['title'],
-                  isDone: data['isDone'],
-                );
-              }).toList();
           return ListView.builder(
-            itemCount: goals.length,
+            itemCount: state.goals.length,
             itemBuilder: (context, index) {
+              final goal = state.goals[index];
               return ListTile(
                 title: Text(
-                  goals[index].title,
+                  goal.title,
                   style: TextStyle(
                     decoration:
-                        goals[index].isDone
+                        goal.isDone
                             ? TextDecoration.lineThrough
                             : TextDecoration.none,
                   ),
                 ),
-                onTap: () => _showEditGoalDialog(context, goals[index]),
+                onTap: () => DialogManager.showEditGoalDialog(context, goal),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Checkbox(
-                      value: goals[index].isDone,
+                      value: goal.isDone,
                       onChanged: (newValue) {
-                        FirebaseService.updateGoalStatus(
-                          goals[index].id,
-                          newValue!,
+                        context.read<GoalBloc>().add(
+                          UpdateGoalStatus(goalId: goal.id, isDone: newValue!),
                         );
                       },
                     ),
                     IconButton(
-                      icon: Icon(Icons.delete),
+                      icon: const Icon(Icons.delete),
                       onPressed: () {
-                        FirebaseService.deleteGoal(goals[index].id);
+                        context.read<GoalBloc>().add(
+                          DeleteGoal(goalId: goal.id),
+                        );
                       },
                     ),
                   ],
@@ -167,8 +66,8 @@ class GoalListScreen extends StatelessWidget {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => _showAddGoalDialog(context),
-        child: Icon(Icons.add),
+        onPressed: () => DialogManager.showAddGoalDialog(context),
+        child: const Icon(Icons.add),
       ),
     );
   }

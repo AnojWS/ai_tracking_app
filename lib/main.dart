@@ -1,3 +1,4 @@
+import 'package:ai_tracking_app/core/di/dependency_injection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'app.dart';
@@ -11,6 +12,9 @@ void main() async {
 
   /// initializing firebase
   await FirebaseService.init();
+
+  // Init GetIt
+  setupLocator();
 
   runApp(AiTrackingApp());
 }
