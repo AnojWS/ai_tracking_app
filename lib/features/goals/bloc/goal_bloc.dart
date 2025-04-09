@@ -48,11 +48,7 @@ class GoalBloc extends Bloc<GoalEvent, GoalState> {
   }
 
   void _updateGoal(UpdateGoal event, Emitter<GoalState> emit) async {
-    await goalRepository.updateGoal(
-      event.goal.id,
-      event.goal.title,
-      event.goal.deadline,
-    );
+    await goalRepository.updateGoal(event.goal);
   }
 
   void _deleteGoal(DeleteGoal event, Emitter<GoalState> emit) async {
