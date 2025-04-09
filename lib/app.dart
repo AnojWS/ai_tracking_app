@@ -1,6 +1,5 @@
 import 'package:ai_tracking_app/core/utils/responsive_design.dart';
 import 'package:ai_tracking_app/features/goals/bloc/goal_bloc.dart';
-import 'package:ai_tracking_app/features/goals/data/repositories/goal_repository.dart';
 import 'package:ai_tracking_app/features/goals/presentation/screens/goal_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
