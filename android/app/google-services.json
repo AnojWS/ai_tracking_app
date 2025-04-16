@@ -12,7 +12,12 @@
           "package_name": "com.example.ai_tracking_app"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "734684488371-0hl5ber2n6c8asisc9n9lc3uve5m086q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCt82qoGD_G355QnsukHQ1bo_TPO4ASpZk"
@@ -20,7 +25,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "734684488371-0hl5ber2n6c8asisc9n9lc3uve5m086q.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "734684488371-ig00f821jk8khcvqeogfp7cn92up1roe.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.aiTrackingApp"
+              }
+            }
+          ]
         }
       }
     }

@@ -14,11 +14,11 @@ void main() async {
   /// initializing firebase
   await FirebaseService.init();
 
-  /// Initialize Firebase Messaging
-  await NotificationService.instance.initialize();
-
   // Init GetIt
   setupLocator();
+
+  /// Initialize Firebase Messaging
+  await NotificationService.instance.initialize();
 
   runApp(AiTrackingApp());
 }
