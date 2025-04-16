@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -28,15 +25,9 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -50,21 +41,49 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCt82qoGD_G355QnsukHQ1bo_TPO4ASpZk',
-    appId: '1:734684488371:android:1b68625be8aee31a0446c6',
-    messagingSenderId: '734684488371',
-    projectId: 'ai-tracking-app',
-    storageBucket: 'ai-tracking-app.firebasestorage.app',
+    apiKey: 'AIzaSyBuSbG1L8PCG-W2VG1cmeBeTxV2Z203pKo',
+    appId: '1:259680947834:android:f0770c8edf47997f52b5c3',
+    messagingSenderId: '259680947834',
+    projectId: 'tracking-app-8cf65',
+    storageBucket: 'tracking-app-8cf65.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBDT5ycVQiRUUPNXbnXtdGCiTT-4BG7wSU',
-    appId: '1:734684488371:ios:e215303d738f2fe70446c6',
-    messagingSenderId: '734684488371',
-    projectId: 'ai-tracking-app',
-    storageBucket: 'ai-tracking-app.firebasestorage.app',
-    iosClientId: '734684488371-ig00f821jk8khcvqeogfp7cn92up1roe.apps.googleusercontent.com',
+    apiKey: 'AIzaSyB3vz0rQ90il0q9vWFnBvJg-SXgnQlJcsI',
+    appId: '1:259680947834:ios:91d7518288dc808052b5c3',
+    messagingSenderId: '259680947834',
+    projectId: 'tracking-app-8cf65',
+    storageBucket: 'tracking-app-8cf65.firebasestorage.app',
     iosBundleId: 'com.example.aiTrackingApp',
+  );
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyBQ97zmhuZ-j_0zH1VBmLzW_ZbKdMTj214',
+    appId: '1:259680947834:web:5a2296649603addc52b5c3',
+    messagingSenderId: '259680947834',
+    projectId: 'tracking-app-8cf65',
+    authDomain: 'tracking-app-8cf65.firebaseapp.com',
+    storageBucket: 'tracking-app-8cf65.firebasestorage.app',
+    measurementId: 'G-9MVV69P7BC',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyB3vz0rQ90il0q9vWFnBvJg-SXgnQlJcsI',
+    appId: '1:259680947834:ios:91d7518288dc808052b5c3',
+    messagingSenderId: '259680947834',
+    projectId: 'tracking-app-8cf65',
+    storageBucket: 'tracking-app-8cf65.firebasestorage.app',
+    iosBundleId: 'com.example.aiTrackingApp',
+  );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyBQ97zmhuZ-j_0zH1VBmLzW_ZbKdMTj214',
+    appId: '1:259680947834:web:589c0fd7c5e4f73852b5c3',
+    messagingSenderId: '259680947834',
+    projectId: 'tracking-app-8cf65',
+    authDomain: 'tracking-app-8cf65.firebaseapp.com',
+    storageBucket: 'tracking-app-8cf65.firebasestorage.app',
+    measurementId: 'G-Q69Z5NTRSB',
   );
 
 }
