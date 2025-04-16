@@ -63,6 +63,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '734684488371',
     projectId: 'ai-tracking-app',
     storageBucket: 'ai-tracking-app.firebasestorage.app',
+    iosClientId: '734684488371-ig00f821jk8khcvqeogfp7cn92up1roe.apps.googleusercontent.com',
     iosBundleId: 'com.example.aiTrackingApp',
   );
 
