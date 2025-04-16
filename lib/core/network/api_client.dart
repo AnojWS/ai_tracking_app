@@ -9,7 +9,7 @@ class ApiClient {
   late final Dio _dio;
   final String _baseUrl =
       dotenv.env['BACKEND_BASE_URL'] ??
-      'http://192.168.1.101:3000/api'; // Use 10.0.2.2 for Android emulator accessing localhost
+      'http://192.168.1.4:3000/api'; // Use 10.0.2.2 for Android emulator accessing localhost
 
   ApiClient() {
     final options = BaseOptions(

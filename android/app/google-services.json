@@ -1,43 +1,26 @@
 {
   "project_info": {
-    "project_number": "734684488371",
-    "project_id": "ai-tracking-app",
-    "storage_bucket": "ai-tracking-app.firebasestorage.app"
+    "project_number": "259680947834",
+    "project_id": "tracking-app-8cf65",
+    "storage_bucket": "tracking-app-8cf65.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:734684488371:android:1b68625be8aee31a0446c6",
+        "mobilesdk_app_id": "1:259680947834:android:f0770c8edf47997f52b5c3",
         "android_client_info": {
           "package_name": "com.example.ai_tracking_app"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "734684488371-0hl5ber2n6c8asisc9n9lc3uve5m086q.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCt82qoGD_G355QnsukHQ1bo_TPO4ASpZk"
+          "current_key": "AIzaSyBuSbG1L8PCG-W2VG1cmeBeTxV2Z203pKo"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "734684488371-0hl5ber2n6c8asisc9n9lc3uve5m086q.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "734684488371-ig00f821jk8khcvqeogfp7cn92up1roe.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.aiTrackingApp"
-              }
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }
